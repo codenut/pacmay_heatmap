@@ -52,4 +52,3 @@ if __name__ == "__main__":
   stream = Stream(auth, listener)
 
   stream.filter(track=["mayweatherpacquiao", "pacquiaomayweather", "pacquiao", "mayweather", "floydmayweather", "mannypacquiao"])
-pcquiaomayweatherrint cwd
