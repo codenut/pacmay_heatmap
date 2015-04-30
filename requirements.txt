@@ -1,3 +1,6 @@
 tweepy==3.3.0
 pyyaml==3.11
 pymongo==3.0.1
+flask==0.10.1
+flask-cors==1.10.3
+redis==2.10.3

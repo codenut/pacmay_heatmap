@@ -5,3 +5,4 @@ logs/
 
 .Python
 config.yml
+pip-selfcheck.json

@@ -28,9 +28,17 @@ access_token_secret = cfg["twitter"]["access_token_secret"]
 consumer_key = cfg["twitter"]["consumer_key"]
 consumer_secret = cfg["twitter"]["consumer_secret"]
 
-con = MongoClient()
-db = con.pacmay
-col = db.tweets
+def connect():
+  con = MongoClient()
+  return con["pacmay"]
+
+def create_collection(db, name):
+  if name not in db.collection_names():
+    db.create_collection(name, capped=True, await_data=True, size=25000000000)
+  return db[name]
+
+handle = connect()
+col = create_collection(handle, "tweets")
 json = import_simplejson()
 
 class PacMayStreamListener(StreamListener):
@@ -50,5 +58,4 @@ if __name__ == "__main__":
   auth = OAuthHandler(consumer_key, consumer_secret)
   auth.set_access_token(access_token, access_token_secret)
   stream = Stream(auth, listener)
-
-  stream.filter(track=["mayweatherpacquiao", "pacquiaomayweather", "pacquiao", "mayweather", "floydmayweather", "mannypacquiao"])
+  stream.filter(track=["mayweatherpacquiao"])#, "pacquiaomayweather", "pacquiao", "mayweather", "floydmayweather", "mannypacquiao"])
