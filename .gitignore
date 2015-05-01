@@ -6,5 +6,5 @@ logs/
 .Python
 config.yml
 pip-selfcheck.json
-supervisor.pid
-supervisor.log
+supervisord.pid
+supervisord.log
