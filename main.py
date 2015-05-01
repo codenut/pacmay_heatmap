@@ -30,18 +30,25 @@ def get_cursor(collection, condition, await_data=True):
   return cur
 
 def get_tweets():
-  cursor = get_cursor(handle.tweets, {})#"coordinates.type": "Point"})
+  cursor = get_cursor(handle.tweets, {"coordinates.type": "Point"})
   i = 0
   while cursor.alive:
     i += 1
     try:
       doc = cursor.next()
-      coordinates = doc["coordinates"]
-      if coordinates:
-        coordinates = coordinates["coordinates"]
+      if doc and "coordinates" in doc and doc["coordinates"]:
+        coordinates = doc["coordinates"]["coordinates"]
       else:
         coordinates = rand_loc()
-      redis.publish("chat", '{"coordinates": %s, "index": %i}' % (coordinates, i))
+
+      if "text" in doc:
+        text = doc["text"]
+
+      if "user" in doc and "profile_image_url" in doc["user"]:
+        profile_image = doc["user"]["profile_image_url"]
+
+      redis.publish("chat", '{"coordinates": %s, "data": %s, "index": %i, "profile_image": %s}' 
+                          %  (coordinates, json.dumps(text), i, json.dumps(profile_image)))
     except StopIteration:
       time.sleep(1)
 
